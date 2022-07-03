@@ -1,0 +1,26 @@
+name: node-diff-zip
+author: "QGX Pagamentos"
+description: This action build the project and compress if sha256sum is different
+inputs:
+  destination:
+    description: Zip destination directory
+    required: true
+  zipfile:
+    description: Zip filename
+    required: false
+branding:
+  icon: "list"
+  color: "purple"
+runs:
+  using: composite
+  steps:
+    - run: ${GITHUB_ACTION_PATH}/entrypoint.sh
+      id: hashzip
+      shell: bash
+      env:
+        DESTINATION: ${{ inputs.destination }}
+        ZIPNAME: ${{ inputs.zipfile }}
+outputs:
+  hash_zip:
+    description: openssl sha256 to base64
+    value: ${{ steps.hashzip.outputs.source_code_hash }}
